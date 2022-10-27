@@ -5,16 +5,17 @@ import {
 	INodeTypeDescription,
 	NodeOperationError,
 } from 'n8n-workflow';
+import axios from "axios"
 
-export class ExampleNode implements INodeType {
+export class AuthPlytixNode implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Example Node',
-		name: 'exampleNode',
+		displayName: 'AuthPlytix',
+		name: 'AuthPlytix',
 		group: ['transform'],
 		version: 1,
-		description: 'Basic Example Node',
+		description: 'AuthPlytixNode',
 		defaults: {
-			name: 'Example Node',
+			name: 'AuthPlytixNode',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -22,37 +23,22 @@ export class ExampleNode implements INodeType {
 			// Node properties which the user gets displayed and
 			// can change on the node.
 			{
-				displayName: 'n8n-nodes-pixel',
-				name: 'myString',
+				displayName: 'API KEY',
+				name: 'myApiKey',
 				type: 'string',
 				default: '',
-				placeholder: 'P valulaceholdere',
-				description: 'The description text',
+				placeholder: 'Digite a chave da API.',
+				description: '',
 			},
 			{
-				displayName: 'My number',
-				name: 'myNumber',
-				type: 'number',
+				displayName: 'API PASSWORD',
+				name: 'myApiNumber',
+				type: 'string',
 				default: '',
-				placeholder: 'Digite o teu número',
-				description: 'A descrição do nome',
-			}, 
-			{
-				displayName: 'My number',
-				name: 'myNumber',
-				type: 'options',
-				default: 'get',
-				options: [
-					{
-						name: 'Test 1',
-						value: 'get'
-					},
-					{
-						name: 'Test 2',
-						value: 'get2'
-					}
-				]
-			}, 
+				placeholder: 'Digite a password',
+				description: '',
+			},
+
 		],
 	};
 
@@ -64,22 +50,32 @@ export class ExampleNode implements INodeType {
 		const items = this.getInputData();
 
 		let item: INodeExecutionData;
-		let myString: string;
-		let myNumber: number;
+		let myApiNumber: string;
+		let myApiKey: string;
 
 		// Iterates over all input items and add the key "myString" with the
 		// value the parameter "myString" resolves to.
 		// (This could be a different value for each item in case it contains an expression)
 		for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
 			try {
-				myString = this.getNodeParameter('myString', itemIndex, '') as string;
-				myNumber = this.getNodeParameter('myNumber', itemIndex, '') as number;
+				myApiNumber = this.getNodeParameter('myApiNumber', itemIndex, '') as string;
+				myApiKey = this.getNodeParameter('myApiKey', itemIndex, '') as string;
 				item = items[itemIndex];
 
-				item.json['myString'] = myString;
-				item.json['myNumber'] = myNumber;
+				try{
+					const response = await axios.post("https://auth.plytix.com/auth/api/get-token", {
+						"api_key": myApiKey,
+						"api_password": myApiNumber
+					})
 
-				
+					item.json['myApiNumber'] = myApiNumber;
+					item.json['myApiKey'] = myApiKey;
+					item.json["access_token"] = response.data.data[0].access_token
+					item.json["refresh_token"] = response.data.data[0].refresh_token
+
+				}catch(e){
+					item.json["response"] = e
+				}
 
 			} catch (error) {
 				// This node should never fail but we want to showcase how
