@@ -1,11 +1,12 @@
-import { IExecuteFunctions } from 'n8n-core';
+import { IExecuteFunctions } from 'n8n-core'
 import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
 	NodeOperationError,
-} from 'n8n-workflow';
-import axios from "axios"
+} from 'n8n-workflow'
+
+import AuthPlytix from "./AuthPlytix"
 
 export class AuthPlytixNode implements INodeType {
 	description: INodeTypeDescription = {
@@ -14,79 +15,165 @@ export class AuthPlytixNode implements INodeType {
 		group: ['transform'],
 		version: 1,
 		description: 'AuthPlytixNode',
+		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		defaults: {
 			name: 'AuthPlytixNode',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
+		credentials:[
+			{
+				name: 'PlytixCredentialsApi',
+				required: true,
+			}
+		],
 		properties: [
-			// Node properties which the user gets displayed and
-			// can change on the node.
 			{
-				displayName: 'API KEY',
-				name: 'myApiKey',
-				type: 'string',
-				default: '',
-				placeholder: 'Digite a chave da API.',
-				description: '',
+				displayName: 'Recurso',
+				name: 'resource',
+				type: 'options',
+				noDataExpression: true,
+				options: [
+					{
+						name: 'Product',
+						value: 'Produto',
+					},
+				],
+				default: 'Produto',
 			},
 			{
-				displayName: 'API PASSWORD',
-				name: 'myApiNumber',
+				displayName: 'Operação',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				default: 'create',
+				required: true,
+				options: [
+					{
+						name: 'Create',
+						value: 'create',
+					},
+					{
+						name: 'Delete',
+						value: 'delete',
+					},
+					{
+						name: 'Find One',
+						value: 'find',
+					},
+				],
+			},
+			{
+				displayName: 'Sku',
+				name: 'sku',
 				type: 'string',
 				default: '',
-				placeholder: 'Digite a password',
-				description: '',
+				placeholder: 'Digite o nome do produto',
+				displayOptions:{
+					show:{
+						operation:[
+							'create'
+						]
+					}
+				}
 			},
-
+			{
+				displayName: 'ID do produto',
+				name: 'produtctID',
+				type: 'string',
+				default: '',
+				placeholder: 'Digite o id do produto',
+				displayOptions:{
+					show:{
+						operation:[
+							'delete',
+							'find'
+						]
+					}
+				}
+			},
 		],
 	};
 
-	// The function below is responsible for actually doing whatever this node
-	// is supposed to do. In this case, we're just appending the `myString` property
-	// with whatever the user has entered.
-	// You can make async calls and use `await`.
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 
 		let item: INodeExecutionData;
-		let myApiNumber: string;
-		let myApiKey: string;
 
-		// Iterates over all input items and add the key "myString" with the
-		// value the parameter "myString" resolves to.
-		// (This could be a different value for each item in case it contains an expression)
 		for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
 			try {
-				myApiNumber = this.getNodeParameter('myApiNumber', itemIndex, '') as string;
-				myApiKey = this.getNodeParameter('myApiKey', itemIndex, '') as string;
-				item = items[itemIndex];
+				const sku = this.getNodeParameter('sku', itemIndex, '') as string
+				item = items[itemIndex]
 
-				try{
-					const response = await axios.post("https://auth.plytix.com/auth/api/get-token", {
-						"api_key": myApiKey,
-						"api_password": myApiNumber
-					})
+				const credentials = await this.getCredentials('PlytixCredentialsApi', itemIndex)
+				const resource = await this.getNodeParameter('resource', itemIndex)
+				const operation = await this.getNodeParameter('operation', itemIndex)
+				const produtctID = await this.getNodeParameter('produtctID', itemIndex, '') as string
 
-					item.json['myApiNumber'] = myApiNumber;
-					item.json['myApiKey'] = myApiKey;
-					item.json["access_token"] = response.data.data[0].access_token
-					item.json["refresh_token"] = response.data.data[0].refresh_token
+				const token = await AuthPlytix({api_key: credentials.api_key, api_password: credentials.api_password})
 
-				}catch(e){
-					item.json["response"] = e
+				let response
+				switch(resource){
+					case 'Produto':
+						switch(operation){
+							case 'create':
+								response = await this.helpers.httpRequest(
+									{
+										method: 'POST',
+										baseURL: 'https://pim.plytix.com/api/v1',
+										url: '/products',
+										body:{
+											'sku': sku
+										},
+										headers:{
+											Accept: 'application/json',
+											Authorization: `Bearer ${token[0].access_token}`
+										}
+									}
+								)
+
+								item.json["response"] = response
+							break
+							case 'delete':
+								response = await this.helpers.httpRequest(
+									{
+										method: 'DELETE',
+										baseURL: 'https://pim.plytix.com/api/v1/products',
+										url: produtctID,
+										headers:{
+											Accept: 'application/json',
+											Authorization: `Bearer ${token[0].access_token}`
+										}
+									}
+								)
+								item.json["response"] = response
+							break;
+							case 'find':
+								response = await this.helpers.httpRequest(
+									{
+										method: 'GET',
+										baseURL: 'https://pim.plytix.com/api/v1/products/',
+										url: produtctID,
+										headers:{
+											Accept: 'application/json',
+											Authorization: `Bearer ${token[0].access_token}`
+										}
+									}
+								)
+							break
+						}
+					break
 				}
 
+				item.json["response"] = response
+				
+
 			} catch (error) {
-				// This node should never fail but we want to showcase how
-				// to handle errors.
+
 				if (this.continueOnFail()) {
 					items.push({ json: this.getInputData(itemIndex)[0].json, error, pairedItem: itemIndex });
 				} else {
-					// Adding `itemIndex` allows other workflows to handle this error
 					if (error.context) {
-						// If the error thrown already contains the context property,
-						// only append the itemIndex
 						error.context.itemIndex = itemIndex;
 						throw error;
 					}
@@ -97,6 +184,7 @@ export class AuthPlytixNode implements INodeType {
 			}
 		}
 
-		return this.prepareOutputData(items);
+		return this.prepareOutputData(items)
+
 	}
 }

@@ -5,32 +5,38 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export class HttpBinApi implements ICredentialType {
-	name = 'httpbinApi';
-	displayName = 'HttpBin API';
-	documentationUrl = '<your-docs-url>';
+export class AkeneoApi implements ICredentialType {
+	name = 'AkeneoApi';
+	displayName = 'Akeneo';
+	documentationUrl = 'https://test.com';
 	properties: INodeProperties[] = [
 		{
-			displayName: 'Token',
-			name: 'token',
+			displayName: 'User',
+			name: 'user',
 			type: 'string',
 			default: '',
 		},
 		{
-			displayName: 'Domain',
+			displayName: 'Password',
+			name: 'password',
+			type: 'string',
+			default: '',
+		},
+		{
+			displayName: 'Domínio',
 			name: 'domain',
 			type: 'string',
-			default: 'https://httpbin.org',
-		},
-
+			default: 'http://10.0.7.84:8080',
+		}
 	];
+
 	authenticate = {
 		type: 'generic',
 		properties: {
 			headers: {
 				Authorization: '={{"Bearer " + $credentials.token}}',
-			},
-		},
+			}
+		}
 	} as IAuthenticateGeneric;
 
 	// The block below tells how this credential can be tested
@@ -39,8 +45,13 @@ export class HttpBinApi implements ICredentialType {
 			baseURL: '={{$credentials?.domain}}',
 			url: '',
 			body:{
-				test: '={{$credentials?.token}}'
-			}
+				api_key: '={{$credentials?.api_key}}',
+				api_password: '={{$credentials?.api_password}}'
+			},
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			method: 'POST'
 		},
 	};
 }
