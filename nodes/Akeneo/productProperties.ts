@@ -40,18 +40,7 @@ export const productProperties: INodeProperties[] = [
 			}
 		}
 	},
-	{
-		displayName: 'Family',
-		name: 'familyQuery',
-		type: 'string',
-		default: '',
-		displayOptions:{
-			show:{
-				resource: ['Produto'],
-				operation:['find']
-			}
-		}
-	},
+
 	{
 		displayName: 'ID',
 		name: 'productID',

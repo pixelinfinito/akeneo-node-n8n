@@ -11,14 +11,26 @@ export class AkeneoApi implements ICredentialType {
 	documentationUrl = 'https://test.com';
 	properties: INodeProperties[] = [
 		{
-			displayName: 'User',
-			name: 'user',
+			displayName: 'Username',
+			name: 'username',
 			type: 'string',
 			default: '',
 		},
 		{
 			displayName: 'Password',
 			name: 'password',
+			type: 'string',
+			default: '',
+		},
+		{
+			displayName: 'ClientID',
+			name: 'clientid',
+			type: 'string',
+			default: '',
+		},
+		{
+			displayName: 'Secret',
+			name: 'secret',
 			type: 'string',
 			default: '',
 		},

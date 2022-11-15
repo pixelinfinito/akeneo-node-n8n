@@ -6,9 +6,11 @@ import {
 	NodeOperationError,
 } from 'n8n-workflow'
 import axios from 'axios'
-//import AuthPlytix from "./AuthPlytix"
-import { productProperties } from './productProperties'
+import {akeneoRequest, typeAkeneoRequest} from "./akeneoRequest"
+import { productProperties ,} from './productProperties'
 import { FamilyProperties } from './FamilyProperties'
+
+import getToken from './getToken'
 
 export class Akeneo implements INodeType {
 	description: INodeTypeDescription = {
@@ -83,7 +85,6 @@ export class Akeneo implements INodeType {
 					},
 				],
 			},
-
 			...productProperties,
 			...FamilyProperties
 		],
@@ -99,123 +100,55 @@ export class Akeneo implements INodeType {
 
 				item = items[itemIndex]
 
-				const headerRequest = {
-					'Cookie': '_pk_id.1.1fff=11490ade175b99b4.1666351845.; BAPID=vs6ppempla7aaeasogj93o5nq1',
-					'X-Requested-With': 'XMLHttpRequest'
-				}
-
+				//propiedades (dados dos inputes)
 				const identifier = await this.getNodeParameter('identifier', itemIndex, '') as string
 				const family = await this.getNodeParameter('family', itemIndex, '') as string
-				const resource = await this.getNodeParameter('resource', itemIndex)
-				const operation = await this.getNodeParameter('operation', itemIndex)
+				const productNameQuery = await this.getNodeParameter('productNameQuery', itemIndex, '') as string
 				const familyNameAdd = await this.getNodeParameter('familyNameAdd', itemIndex, '') as string
+
+				const resource = await this.getNodeParameter('resource', itemIndex)
+
+				const operation = await this.getNodeParameter('operation', itemIndex)
+
 				const productID = await this.getNodeParameter('productID', itemIndex, 0)
-				const credentials = await this.getCredentials('AkeneoApi', itemIndex, {}) as {}
 
-				const baseURL = credentials.domain
+				//dados das credendicias
+				const credentials = await this.getCredentials('AkeneoApi', itemIndex)
 
-				console.log(baseURL)
-				const httRequestAkeneo = axios.create({
-					baseURL
+				const ClientID =  credentials.clientid
+				const Secret = credentials.secret
+				const username = credentials.username
+				const password = credentials.password
+
+				const token = await getToken({
+					base64ClientIdSecretn:  btoa(ClientID + ':'+ Secret),
+					domain: credentials.domain,
+					password,
+					username
 				})
-
+				const baseURL = credentials.domain
+				/* const httRequestAkeneo = axios.create({
+					baseURL,
+				})
+				httRequestAkeneo.defaults.headers.common["Authorization"] =  'Bearer '+token.access_token */
 				switch(resource){
 					case 'Produto':
 						switch(operation){
-							case 'create':
-								try{
-									const response = await httRequestAkeneo.post('/enrich/product/rest', {
-										"identifier": identifier,
-										"family": family,
-									},{
-										headers: headerRequest
-									})
+							case 'findAll':
+								const response = await akeneoRequest.GET({
+									token: token.access_token,
+									url: '/api/rest/v1/products',
+									baseUrl: baseURL,
+								})
+								item.json["response"] = response
+								/* try{
+
+									const response = await httRequestAkeneo.get('/api/rest/v1/products')
 									item.json["response"] = response.data
 								}catch(e){
 									item.json["response"] = e
-								}
+								} */
 							break
-							case 'find':
-								//http://10.0.7.84:8080/datagrid/product-grid/load
-							break
-
-							case 'findAll':
-								try{
-									const response = await httRequestAkeneo.get('/datagrid/product-grid/load', {
-										headers: headerRequest
-									})
-									item.json["response"] = JSON.parse(response.data.data)
-								}catch(e){
-									item.json["response"] = e
-								}
-							break
-
-							case 'delete':
-								try{
-									const response = await httRequestAkeneo.delete('/enrich/product/rest/'+productID, {
-										headers: headerRequest
-									})
-									item.json["response"] = JSON.parse(response.data)
-								}catch(e){
-									item.json["response"] = e
-								}
-							break
-
-							case 'edit':
-								try{
-									const response = await httRequestAkeneo.post('/enrich/product/rest/'+productID, {
-										"values":{
-											"sku":[{"locale":null,"scope":null,"data":identifier}]
-										},
-								},{
-										headers: headerRequest
-									})
-									item.json["response"] = JSON.parse(response.data)
-								}catch(e){
-									item.json["response"] = e
-								}
-							break
-						}
-					break
-
-					case 'Family':
-						console.log(familyNameAdd)
-						switch(operation){
-							case 'create':
-								try{
-									const response = await httRequestAkeneo.post('/configuration/rest/family/', {
-										"code": familyNameAdd,
-									},{
-										headers: headerRequest
-									})
-									item.json["response"] = response.data
-								}catch(e){
-									item.json["response"] = e
-								}
-							break
-
-							case 'delete':
-								try{
-									const response = await httRequestAkeneo.delete('/configuration/rest/family/'+familyNameAdd,{
-										headers: headerRequest
-									})
-									item.json["response"] = JSON.parse(response.data)
-								}catch(e){
-									item.json["response"] = e
-								}
-							break
-
-							case 'findAll':
-								try{
-									const response = await httRequestAkeneo.get('/datagrid/family-grid/load?localeCode=en_US',{
-										headers: headerRequest
-									})
-									item.json["response"] = JSON.parse(response.data.data)
-								}catch(e){
-									item.json["response"] = e
-								}
-							break
-
 						}
 					break
 				}

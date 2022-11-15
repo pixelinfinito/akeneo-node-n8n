@@ -11,7 +11,7 @@ export const FamilyProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Family'],
-				operation:['create', 'edit', 'delete']
+				operation:['create', 'edit', 'delete', 'find']
 			}
 		}
 	},
