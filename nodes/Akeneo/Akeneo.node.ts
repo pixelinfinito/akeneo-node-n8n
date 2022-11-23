@@ -12,6 +12,7 @@ import {productProperties} from './Properties/productProperties'
 import {LocaleProprties} from "./Properties/LocaleProprties"
 import {FamilyProperties}  from './Properties/FamilyProperties'
 import {MediaFileProperties} from "./Properties/MediaFileProperties"
+import { AkeneoProperties } from './Properties/AkeneoProperties'
 
 import getToken from './helpers/getToken'
 
@@ -35,80 +36,11 @@ export class Akeneo implements INodeType {
 		credentials:[
 			{
 				name: 'AkeneoApi',
-				required: true
-			}
+				required: true,
+			},
 		],
 		properties: [
-			{
-				displayName: 'Recurso',
-				name: 'resource',
-				type: 'options',
-				noDataExpression: true,
-				options: [
-					{
-						name: 'Product',
-						value: 'Produto',
-					},
-					{
-						name: 'Family',
-						value: 'Family',
-					},
-					{
-						name: 'Locale',
-						value: 'Locale',
-					},
-					{
-						name: 'File',
-						value: 'File',
-					},
-				],
-				default: 'Produto',
-			},
-			{
-				displayName: 'Operação',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				default: 'find',
-				required: true,
-				options: [
-					{
-						name: 'Create',
-						value: 'create',
-					},
-					{
-						name: 'Delete',
-						value: 'delete',
-					},
-					{
-						name: 'Find All',
-						value: 'findAll',
-					},
-					{
-						name: 'FindOne',
-						value: 'find',
-					},
-					{
-						name: 'Update',
-						value: 'update',
-						displayOptions:{
-							show:{
-								resource: ['Produto']
-							}
-						}
-					},
-					{
-						name: 'Upload',
-						value: 'upload',
-						displayOptions:{
-							show:{
-								resource: ['File']
-							}
-						}
-					},
-
-				],
-			},
+			...AkeneoProperties,
 			...LocaleProprties,
 			...productProperties,
 			...FamilyProperties,
@@ -212,6 +144,30 @@ export class Akeneo implements INodeType {
 										}
 									}
 								})
+
+								console.log(response.error)
+
+								if(!response.error){
+									console.log('não tem erros')
+									if(filePath){
+										const form  =  new FormData()
+										const newFile =  fs.readFileSync(filePath)
+
+										form.append('product', JSON.stringify({"identifier": identifier, "attribute":"picture", "scope": null,"locale":null}))
+										form.append('file',  newFile, 'logo.png')
+
+										let responseFile = await akeneoRequest.POST({
+											token: token.access_token,
+											url: baseURL+'/api/rest/v1/media-files',
+											body: form.getBuffer(),
+											headers:{
+												...form.getHeaders()
+											}
+										})
+										item.json['responseFile'] = responseFile
+									}
+
+								}
 								item.json["response"] = response
 							break
 
@@ -294,7 +250,7 @@ export class Akeneo implements INodeType {
 										}
 									}
 								})
-
+								
 								item.json["response"] = response
 							break
 						}
@@ -317,25 +273,6 @@ export class Akeneo implements INodeType {
 									url: baseURL+'/api/rest/v1/media-files'
 								})
 								item.json["response"] = response
-							break
-
-							case 'upload':
-
-								const form  =  new FormData()
-								const newFile =  fs.readFileSync(filePath)
-
-								form.append('product', JSON.stringify({"identifier":"Iphone", "attribute":"picture", "scope": null,"locale":null}))
-								form.append('file',  newFile, 'logo.png')
-
-								response = await akeneoRequest.POST({
-									token: token.access_token,
-									url: baseURL+'/api/rest/v1/media-files',
-									body: form.getBuffer(),
-									headers:{
-										...form.getHeaders()
-									}
-								})
-								item.json['message'] = response
 							break
 						}
 					break
