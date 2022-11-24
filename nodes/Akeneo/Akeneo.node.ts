@@ -13,9 +13,8 @@ import {LocaleProprties} from "./Properties/LocaleProprties"
 import {FamilyProperties}  from './Properties/FamilyProperties'
 import {MediaFileProperties} from "./Properties/MediaFileProperties"
 import { AkeneoProperties } from './Properties/AkeneoProperties'
-
+import { CategoryProperties } from './Properties/CategoryProperties'
 import getToken from './helpers/getToken'
-
 import FormData from 'form-data'
 import fs from "fs"
 
@@ -44,7 +43,8 @@ export class Akeneo implements INodeType {
 			...LocaleProprties,
 			...productProperties,
 			...FamilyProperties,
-			...MediaFileProperties
+			...MediaFileProperties,
+			...CategoryProperties
 		],
 	};
 
@@ -58,7 +58,6 @@ export class Akeneo implements INodeType {
 
 				item = items[itemIndex]
 
-				//propiedades (dados dos inputes)
 				const identifier = await this.getNodeParameter('identifier', itemIndex, '') as string
 				const family = await this.getNodeParameter('family', itemIndex, '') as string
 				const productNameQuery = await this.getNodeParameter('productNameQuery', itemIndex, '') as string
@@ -67,9 +66,15 @@ export class Akeneo implements INodeType {
 				const localeInput = await this.getNodeParameter('localeInput', itemIndex, '') as string
 				const enabled = await this.getNodeParameter('enabled', itemIndex, true)
 
-				const resource = await this.getNodeParameter('resource', itemIndex)
-				const operation = await this.getNodeParameter('operation', itemIndex)
-				const productID = await this.getNodeParameter('productID', itemIndex, 0)
+				const resource = await this.getNodeParameter('resource', itemIndex, '')
+				const operation = await this.getNodeParameter('operation', itemIndex, '')
+
+				const otherOperation = await this.getNodeParameter('otherOperation', itemIndex, '')
+				const categoryAndGroupOperation = await this.getNodeParameter('categoryAndGroupOperation', itemIndex, '')
+				const familyOperation = await this.getNodeParameter('familyOperation', itemIndex, '')
+
+				const nameSkuUpdate = await this.getNodeParameter('nameSkuUpdate', itemIndex, 0)
+				const categoryInput = await this.getNodeParameter('categoryInput', itemIndex, '') as string
 				const categories = await this.getNodeParameter('categories', itemIndex, {}) as {categoryShow: []}
 				const groups = await this.getNodeParameter('groups', itemIndex, {}) as {groupsShow: []}
 				const price = await this.getNodeParameter('price', itemIndex, {}) as {priceShow: []}
@@ -100,17 +105,17 @@ export class Akeneo implements INodeType {
 				const baseURL = credentials.domain
 				let response
 
+				const groupsList = convertCollection(groups.groupsShow || [], 'groupsValue')
+				const categoriesList = convertCollection(categories!.categoryShow || [], 'categotyValue')
+				const priceList = convertCollection(price!.priceShow || [], 'priceValue')
+				const coinValueList = convertCollection(price!.priceShow || [],'coinValue')
+
+				const priceListArray : any[] = []
+
 				switch(resource){
 					case 'Produto':
 						switch(operation){
 							case 'create':
-
-								const groupsList = convertCollection(groups.groupsShow || [], 'groupsValue')
-								const categoriesList = convertCollection(categories!.categoryShow || [], 'categotyValue')
-								const priceList = convertCollection(price!.priceShow || [], 'priceValue')
-								const coinValueList = convertCollection(price!.priceShow || [],'coinValue' )
-
-								const priceListArray = []
 
 								for(let i = 0; i < priceList.length; i++){
 									const priceValue = priceList[i]
@@ -123,6 +128,7 @@ export class Akeneo implements INodeType {
 										})
 									}
 								}
+
 								response = await akeneoRequest.POST({
 									token: token.access_token,
 									url: baseURL+'/api/rest/v1/products',
@@ -145,10 +151,7 @@ export class Akeneo implements INodeType {
 									}
 								})
 
-								console.log(response.error)
-
 								if(!response.error){
-									console.log('não tem erros')
 									if(filePath){
 										const form  =  new FormData()
 										const newFile =  fs.readFileSync(filePath)
@@ -184,6 +187,11 @@ export class Akeneo implements INodeType {
 									token: token.access_token,
 									url: baseURL+'/api/rest/v1/products/'+productNameQuery
 								})
+
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
+
 								item.json["response"] = response
 							break
 							case 'delete':
@@ -191,36 +199,52 @@ export class Akeneo implements INodeType {
 									token: token.access_token,
 									url: baseURL+'/api/rest/v1/products/'+productNameQuery
 								})
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
 								item.json["response"] = response
 							break
-						}
-					break
-					case 'Locale':
-						switch(operation){
-							case 'find':
-								response = await akeneoRequest.GET({
+
+							case 'patch':
+								response = await akeneoRequest.PATCH({
 									token: token.access_token,
-									url: baseURL+'/api/rest/v1/locales/'+localeInput
+									url: baseURL+'/api/rest/v1/products/'+identifier,
+									body:{
+										"identifier": identifier,
+										"family": family,
+										"groups": groupsList,
+										"parent": parent || null,
+										"categories": categoriesList,
+										"enabled": enabled,
+										"values": {
+											"price": [
+												{
+													"locale": null,
+													"scope": null,
+													"data": priceListArray
+												}
+											]
+										}
+									}
 								})
-								item.json["response"] = response
-							break
-							case 'findAll':
-								response = await akeneoRequest.GET({
-									token: token.access_token,
-									url: baseURL+'/api/rest/v1/locales'
-								})
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
 								item.json["response"] = response
 							break
 						}
 					break
 
 					case 'Family':
-						switch(operation){
+						switch(familyOperation){
 							case 'find':
 								response = await akeneoRequest.GET({
 									token: token.access_token,
 									url: baseURL+'/api/rest/v1/families/'+familyNameAdd
 								})
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
 								item.json["response"] = response
 							break
 							case 'findAll':
@@ -229,6 +253,9 @@ export class Akeneo implements INodeType {
 									token: token.access_token,
 									url: baseURL+'/api/rest/v1/families'
 								})
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
 								item.json["response"] = response
 
 							break
@@ -250,20 +277,49 @@ export class Akeneo implements INodeType {
 										}
 									}
 								})
-								
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
+								item.json["response"] = response
+							break
+						}
+					break
+
+					case 'Locale':
+						switch(otherOperation){
+							case 'find':
+								response = await akeneoRequest.GET({
+									token: token.access_token,
+									url: baseURL+'/api/rest/v1/locales/'+localeInput
+								})
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
+								item.json["response"] = response
+							break
+							case 'findAll':
+								response = await akeneoRequest.GET({
+									token: token.access_token,
+									url: baseURL+'/api/rest/v1/locales'
+								})
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
 								item.json["response"] = response
 							break
 						}
 					break
 
 					case 'File':
-						switch(operation){
+						switch(otherOperation){
 							case 'find':
 								response = await akeneoRequest.GET({
 									token: token.access_token,
 									url: baseURL+'/api/rest/v1/media-files/'+fileName
 								})
-
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
 								item.json["response"] = response
 							break
 
@@ -272,7 +328,66 @@ export class Akeneo implements INodeType {
 									token: token.access_token,
 									url: baseURL+'/api/rest/v1/media-files'
 								})
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
 								item.json["response"] = response
+							break
+						}
+					break
+
+					case 'Category':
+						switch(categoryAndGroupOperation){
+							case 'findAll':
+								response = await akeneoRequest.GET({
+									token: token.access_token,
+									url: baseURL+'/api/rest/v1/categories'
+								})
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
+								item.json["response"] = response
+							break
+
+							case 'find':
+								response = await akeneoRequest.GET({
+									token: token.access_token,
+									url: baseURL+'/api/rest/v1/categories/'+categoryInput
+								})
+
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
+								item.json["response"] = response
+
+							break
+
+							case 'create':
+
+								const parentCategory = await this.getNodeParameter('parentCategory', itemIndex, '') as string
+								const category_de_DE = await this.getNodeParameter('category_de_DE', itemIndex, '') as string
+								const category_en_US = await this.getNodeParameter('category_en_US', itemIndex, '') as string
+								const category_fr_FR = await this.getNodeParameter('category_fr_FR', itemIndex, '') as string
+
+								response = await akeneoRequest.POST({
+									token: token.access_token,
+									url: baseURL+'/api/rest/v1/categories',
+									body:{
+										"code":categoryInput,
+										"parent":parentCategory,
+										"labels": {
+											"de_DE":category_de_DE,
+											"en_US":category_en_US,
+											"fr_FR":category_fr_FR
+										}
+									}
+								})
+
+								if(response.error){
+									item.json['message'] = response.error.response.data
+								}
+								item.json["response"] = response
+
 							break
 						}
 					break
