@@ -8,20 +8,8 @@ import {
 export class AkeneoApi implements ICredentialType {
 	name = 'AkeneoApi';
 	displayName = 'Akeneo';
-	documentationUrl = 'https://test.com';
+	documentationUrl = 'https://github.com/pixelinfinito/akeneo-node-n8n';
 	properties: INodeProperties[] = [
-		{
-			displayName: 'Username',
-			name: 'username',
-			type: 'string',
-			default: '',
-		},
-		{
-			displayName: 'Password',
-			name: 'password',
-			type: 'string',
-			default: '',
-		},
 		{
 			displayName: 'ClientID',
 			name: 'clientid',
@@ -31,6 +19,18 @@ export class AkeneoApi implements ICredentialType {
 		{
 			displayName: 'Secret',
 			name: 'secret',
+			type: 'string',
+			default: '',
+		},
+		{
+			displayName: 'Username',
+			name: 'username',
+			type: 'string',
+			default: '',
+		},
+		{
+			displayName: 'Password',
+			name: 'password',
 			type: 'string',
 			default: '',
 		},
@@ -51,7 +51,6 @@ export class AkeneoApi implements ICredentialType {
 		}
 	} as IAuthenticateGeneric;
 
-	// The block below tells how this credential can be tested
 	test: ICredentialTestRequest = {
 		request: {
 			baseURL: '={{$credentials?.domain}}',
