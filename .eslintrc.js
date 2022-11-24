@@ -38,6 +38,7 @@ module.exports = {
 				'n8n-nodes-base/cred-class-field-documentation-url-miscased': 'off',
 			},
 		},
+		
 		{
 			files: ['./nodes/**/*.ts'],
 			plugins: ['eslint-plugin-n8n-nodes-base'],
