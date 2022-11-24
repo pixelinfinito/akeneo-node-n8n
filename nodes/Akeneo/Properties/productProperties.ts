@@ -11,7 +11,19 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create', 'update']
+				operation:['create', 'patch']
+			}
+		}
+	},
+	{
+		displayName: 'Novo indentidicador(SKU)',
+		name: 'nameSkuUpdate',
+		type: 'string',
+		default: '',
+		displayOptions:{
+			show:{
+				resource: ['Produto'],
+				operation:['patch']
 			}
 		}
 	},
@@ -23,7 +35,7 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create']
+				operation:['create', 'patch']
 			}
 		}
 	},
@@ -35,7 +47,7 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create']
+				operation:['create', 'patch']
 			}
 		}
 	},
@@ -47,7 +59,7 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create']
+				operation:['create', 'patch']
 			}
 		}
 	},
@@ -77,7 +89,7 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create']
+				operation:['create', 'patch']
 			}
 		}
 	},
@@ -108,7 +120,7 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create']
+				operation:['create', 'patch']
 			}
 		}
 	},
@@ -145,7 +157,7 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create']
+				operation:['create', 'patch']
 			}
 		}
 	},
@@ -158,20 +170,20 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['find', 'delete']
+				operation:['find', 'patch']
 			}
 		}
 	},
-
 	{
-		displayName: 'ID',
-		name: 'productID',
-		type: 'number',
+		displayName: 'File Path',
+		name: 'filePath',
+		type: 'string',
 		default: '',
+		placeholder: '/path/image.png',
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['update']
+				operation:['create', 'patch']
 			}
 		}
 	},

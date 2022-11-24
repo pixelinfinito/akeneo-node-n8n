@@ -10,20 +10,24 @@ export const AkeneoProperties: INodeProperties[] = [
 		noDataExpression: true,
 		options: [
 			{
-				name: 'Product',
-				value: 'Produto',
+				name: 'Category',
+				value: 'Category',
 			},
 			{
 				name: 'Family',
 				value: 'Family',
 			},
 			{
+				name: 'File',
+				value: 'File',
+			},
+			{
 				name: 'Locale',
 				value: 'Locale',
 			},
 			{
-				name: 'File',
-				value: 'File',
+				name: 'Product',
+				value: 'Produto',
 			},
 		],
 		default: 'Produto',
@@ -53,18 +57,93 @@ export const AkeneoProperties: INodeProperties[] = [
 				value: 'find',
 			},
 			{
-				name: 'Update',
-				value: 'update',
-				displayOptions:{
-					show:{
-						resource: ['Produto']
-					}
-				}
+				name: 'Patch',
+				value: 'patch',
+			}
+		],
+		displayOptions:{
+			show:{
+				resource: ['Produto'],
+			}
+		}
+	},
+	{
+		displayName: 'Operação',
+		name: 'otherOperation',
+		type: 'options',
+		noDataExpression: true,
+		default: 'find',
+		required: true,
+		options: [
+			{
+				name: 'Find All',
+				value: 'findAll',
+			},
+			{
+				name: 'FindOne',
+				value: 'find',
 			},
 		],
+		displayOptions:{
+			show:{
+				resource: ['File', 'Locale'],
+			}
+		}
+	},
+	{
+		displayName: 'Operação',
+		name: 'categoryAndGroupOperation',
+		type: 'options',
+		noDataExpression: true,
+		default: 'find',
+		required: true,
+		options: [
+			{
+				name: 'Find All',
+				value: 'findAll',
+			},
+			{
+				name: 'FindOne',
+				value: 'find',
+			},
+			{
+				name: 'Create',
+				value: 'create',
+			},
+		],
+		displayOptions:{
+			show:{
+				resource: ['Category', 'Group'],
+			}
+		}
+	},
+
+	{
+		displayName: 'Operação',
+		name: 'familyOperation',
+		type: 'options',
+		noDataExpression: true,
+		default: 'find',
+		required: true,
+		options: [
+			{
+				name: 'Create',
+				value: 'create',
+			},
+			{
+				name: 'Find All',
+				value: 'findAll',
+			},
+			{
+				name: 'FindOne',
+				value: 'find',
+			},
+		],
+		displayOptions:{
+			show:{
+				resource: ['Family'],
+			}
+		}
 	},
 
 ];
-
-
-

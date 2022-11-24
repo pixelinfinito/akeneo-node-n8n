@@ -1,6 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
 
-// When the resource `httpVerb` is selected, this `operation` parameter will be shown.
 export const LocaleProprties: INodeProperties[] = [
 	{
 		displayName: 'Locale',
