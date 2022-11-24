@@ -15,7 +15,7 @@ const GET = async ({ url, headers, token} : typeAkeneoRequest)=>{
 		const response = await axios.get(url, headers)
 		return response.data
 	}catch(e){
-		return e
+		return {error: e}
 	}
 }
 
@@ -23,11 +23,11 @@ const POST = async({ url, body, headers, token} : typeAkeneoRequest)=>{
 	axios.defaults.headers.common["Authorization"] =  'Bearer '+token
 	try{
 		const response = await axios.post(url, body, {
-		headers: headers
-	})
+			headers: headers
+		})
 		return response.data
 	}catch(e){
-		return e
+		return {error: e}
 	}
 }
 
@@ -39,7 +39,7 @@ const  PATCH =  async({url, body, headers, token} : typeAkeneoRequest)=>{
 		})
 		return response.data
 	}catch(e){
-		return e
+		return {error: e}
 	}
 }
 
@@ -51,7 +51,7 @@ const DELETE =  async ({ url, body, headers, token} : typeAkeneoRequest)=>{
 		})
 		return response.data
 	}catch(e){
-		return e
+		return {error: e}
 	}
 }
 
