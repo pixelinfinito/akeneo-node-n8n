@@ -1,12 +1,11 @@
-export default function convertCollection(collection:[], key:string){
+export function convertCollection(collection:[], key:string){
 
-	const newCollection: any[] = []
-
+	const newCollection: [] = [];
 	if(collection.length > 0){
 		collection.forEach(element => {
-			newCollection.push(element[key])
-		})
+			newCollection.push(element[key]);
+		});
 	}
 
-	return newCollection
+	return newCollection;
 }

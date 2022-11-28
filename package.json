@@ -1,15 +1,21 @@
 {
-  "name": "akeneo-node-n8n",
+  "name": "n8n-nodes-akeneo",
   "version": "0.1.0",
-  "description": "",
+  "description": "A node to use some features of the Akeneo platform.",
   "keywords": [
-    "n8n-community-node-package"
+    "n8n-community-node-package",
+    "n8n-nodes-akeneo",
+    "akeneo",
+    "akeneo-node",
+    "akeneo-node-n8n",
+    "akeneo-pixel-infinito",
+    "pixe-inifito-akeneo-node"
   ],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://pixel.ao",
   "author": {
-    "name": "pixel",
-    "email": "edson.bando@pixel.ao"
+    "name": "Pixel Inifito",
+    "email": "edson.bandola@pixel.ao"
   },
   "repository": {
     "type": "git",

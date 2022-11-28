@@ -11,9 +11,9 @@ export const FamilyProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Family'],
-				familyOperation:['create', 'update', 'delete', 'find']
-			}
-		}
+				familyOperation:['create', 'update', 'delete', 'find'],
+			},
+		},
 	},
 	{
 		displayName: 'Attributes',
@@ -40,8 +40,8 @@ export const FamilyProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['Family'],
-				familyOperation:['create']
-			}
+				familyOperation:['create'],
+			},
 		},
 	},
 
@@ -53,8 +53,8 @@ export const FamilyProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['Family'],
-				familyOperation:['create']
-			}
+				familyOperation:['create'],
+			},
 		},
 	},
 	{
@@ -65,8 +65,8 @@ export const FamilyProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['Family'],
-				familyOperation:['create']
-			}
+				familyOperation:['create'],
+			},
 		},
 	},
 	{
@@ -77,8 +77,8 @@ export const FamilyProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['Family'],
-				familyOperation:['create']
-			}
+				familyOperation:['create'],
+			},
 		},
 	},
 

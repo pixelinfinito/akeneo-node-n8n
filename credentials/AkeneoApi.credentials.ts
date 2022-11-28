@@ -6,8 +6,8 @@ import {
 } from 'n8n-workflow';
 
 export class AkeneoApi implements ICredentialType {
-	name = 'AkeneoApi';
-	displayName = 'Akeneo';
+	displayName = 'AKENEO API';
+	name = 'akeneoApi';
 	documentationUrl = 'https://github.com/pixelinfinito/akeneo-node-n8n';
 	properties: INodeProperties[] = [
 		{
@@ -39,17 +39,17 @@ export class AkeneoApi implements ICredentialType {
 			name: 'domain',
 			type: 'string',
 			default: 'http://10.0.7.84:8080',
-		}
+		},
 	];
 
-	authenticate = {
+	authenticate:IAuthenticateGeneric = {
 		type: 'generic',
 		properties: {
 			headers: {
 				Authorization: '={{"Bearer " + $credentials.token}}',
-			}
-		}
-	} as IAuthenticateGeneric;
+			},
+		},
+	};
 
 	test: ICredentialTestRequest = {
 		request: {
@@ -57,12 +57,12 @@ export class AkeneoApi implements ICredentialType {
 			url: '',
 			body:{
 				api_key: '={{$credentials?.api_key}}',
-				api_password: '={{$credentials?.api_password}}'
+				api_password: '={{$credentials?.api_password}}',
 			},
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 			},
-			method: 'POST'
+			method: 'POST',
 		},
 	};
 }

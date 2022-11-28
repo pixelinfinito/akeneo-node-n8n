@@ -12,9 +12,9 @@ export const MediaFileProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['File'],
-				otherOperation:['find']
-			}
-		}
+				otherOperation:['find'],
+			},
+		},
 	},
 ];
 

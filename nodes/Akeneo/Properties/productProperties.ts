@@ -11,9 +11,9 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create', 'patch']
-			}
-		}
+				operation:['create', 'patch'],
+			},
+		},
 	},
 	{
 		displayName: 'Novo indentidicador(SKU)',
@@ -23,9 +23,9 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['patch']
-			}
-		}
+				operation:['patch'],
+			},
+		},
 	},
 	{
 		displayName: 'Family',
@@ -35,9 +35,9 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create', 'patch']
-			}
-		}
+				operation:['create', 'patch'],
+			},
+		},
 	},
 	{
 		displayName: 'Parent',
@@ -47,9 +47,9 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create', 'patch']
-			}
-		}
+				operation:['create', 'patch'],
+			},
+		},
 	},
 	{
 		displayName: 'Enabled',
@@ -59,9 +59,9 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create', 'patch']
-			}
-		}
+				operation:['create', 'patch'],
+			},
+		},
 	},
 	{
 		displayName: 'Categories',
@@ -83,15 +83,15 @@ export const productProperties: INodeProperties[] = [
 						type: 'string',
 						default: '',
 					},
-				]
+				],
 			},
 		],
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create', 'patch']
-			}
-		}
+				operation:['create', 'patch'],
+			},
+		},
 	},
 
 	{
@@ -114,15 +114,15 @@ export const productProperties: INodeProperties[] = [
 						type: 'string',
 						default: '',
 					},
-				]
+				],
 			},
 		],
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create', 'patch']
-			}
-		}
+				operation:['create', 'patch'],
+			},
+		},
 	},
 
 	{
@@ -151,15 +151,15 @@ export const productProperties: INodeProperties[] = [
 						type: 'string',
 						default: '',
 					},
-				]
+				],
 			},
 		],
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create', 'patch']
-			}
-		}
+				operation:['create', 'patch'],
+			},
+		},
 	},
 	{
 		displayName: 'Nome',
@@ -170,9 +170,9 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['find', 'patch']
-			}
-		}
+				operation:['find', 'patch'],
+			},
+		},
 	},
 	{
 		displayName: 'File Path',
@@ -183,9 +183,9 @@ export const productProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-				operation:['create', 'patch']
-			}
-		}
+				operation:['create', 'patch'],
+			},
+		},
 	},
 ];
 

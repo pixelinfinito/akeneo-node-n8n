@@ -11,9 +11,9 @@ export const CategoryProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Category'],
-				categoryAndGroupOperation:['create', 'update', 'delete', 'find']
-			}
-		}
+				categoryAndGroupOperation:['create', 'update', 'delete', 'find'],
+			},
+		},
 	},
 
 	{
@@ -24,9 +24,9 @@ export const CategoryProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Category'],
-				categoryAndGroupOperation:['create']
-			}
-		}
+				categoryAndGroupOperation:['create'],
+			},
+		},
 	},
 
 	{
@@ -37,8 +37,8 @@ export const CategoryProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['Category'],
-				categoryAndGroupOperation:['create']
-			}
+				categoryAndGroupOperation:['create'],
+			},
 		},
 	},
 	{
@@ -49,8 +49,8 @@ export const CategoryProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['Category'],
-				categoryAndGroupOperation:['create']
-			}
+				categoryAndGroupOperation:['create'],
+			},
 		},
 	},
 	{
@@ -61,8 +61,8 @@ export const CategoryProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['Category'],
-				categoryAndGroupOperation:['create']
-			}
+				categoryAndGroupOperation:['create'],
+			},
 		},
 	},
 

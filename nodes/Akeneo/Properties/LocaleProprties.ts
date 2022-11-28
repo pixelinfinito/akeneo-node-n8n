@@ -10,22 +10,22 @@ export const LocaleProprties: INodeProperties[] = [
 		options:[
 			{
 				name: 'de_DE',
-				value: 'de_DE'
+				value: 'de_DE',
 			},
 			{
 				name: 'en_US',
-				value: 'en_US'
+				value: 'en_US',
 			},
 			{
 				name: 'fr_FR',
-				value: 'fr_FR'
-			}
+				value: 'fr_FR',
+			},
 		],
 		displayOptions:{
 			show:{
 				resource: ['Locale'],
-				operation:['find']
-			}
-		}
+				operation:['find'],
+			},
+		},
 	},
 ];

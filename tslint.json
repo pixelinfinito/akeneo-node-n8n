@@ -8,7 +8,7 @@
 	"jsRules": {},
 	"rules": {
 		"array-type": [
-			true,
+			false,
 			"array-simple"
 		],
 		"arrow-return-shorthand": true,
@@ -117,12 +117,11 @@
 		],
 		"variable-name": [
 			true,
-			"check-format",
 			"ban-keywords",
 			"allow-leading-underscore",
 			"allow-trailing-underscore"
 		]
 	},
-	
+
 	"rulesDirectory": []
 }

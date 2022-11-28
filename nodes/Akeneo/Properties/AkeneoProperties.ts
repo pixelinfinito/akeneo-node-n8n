@@ -43,29 +43,34 @@ export const AkeneoProperties: INodeProperties[] = [
 			{
 				name: 'Create',
 				value: 'create',
+				action: 'Create a produto',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
+				action: 'Delete a produto',
 			},
 			{
 				name: 'Find All',
 				value: 'findAll',
+				action: 'Find all a produto',
 			},
 			{
 				name: 'FindOne',
 				value: 'find',
+				action: 'Find one a produto',
 			},
 			{
 				name: 'Patch',
 				value: 'patch',
-			}
+				action: 'Patch a produto',
+			},
 		],
 		displayOptions:{
 			show:{
 				resource: ['Produto'],
-			}
-		}
+			},
+		},
 	},
 	{
 		displayName: 'Operação',
@@ -87,8 +92,8 @@ export const AkeneoProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['File', 'Locale'],
-			}
-		}
+			},
+		},
 	},
 	{
 		displayName: 'Operação',
@@ -114,8 +119,8 @@ export const AkeneoProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Category', 'Group'],
-			}
-		}
+			},
+		},
 	},
 
 	{
@@ -142,8 +147,8 @@ export const AkeneoProperties: INodeProperties[] = [
 		displayOptions:{
 			show:{
 				resource: ['Family'],
-			}
-		}
+			},
+		},
 	},
 
 ];
