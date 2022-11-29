@@ -38,7 +38,7 @@ export class AkeneoApi implements ICredentialType {
 			displayName: 'Domínio',
 			name: 'domain',
 			type: 'string',
-			default: 'http://10.0.7.84:8080',
+			default: process.env.ENV_SERVER_AKENEO,
 		},
 	];
 
