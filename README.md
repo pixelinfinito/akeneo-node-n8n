@@ -15,9 +15,11 @@ You need the following installed on your development machine:
 	```
 * Recommended: follow n8n's guide to [set up your development environment](https://docs.n8n.io/integrations/creating-nodes/build/node-development-environment/).
 
-## Using
+## Using on N8N
 
-1. Run `npm i n8n-nodes-akeneo`.
+1. go to N8N settings
+2. go to communities nodes
+3. install the node with the name of `n8n-nodes-akeneo`
  
 
 ## Using locally
