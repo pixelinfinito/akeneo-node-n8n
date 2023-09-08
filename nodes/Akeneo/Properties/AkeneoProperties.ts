@@ -4,7 +4,7 @@ import { INodeProperties } from 'n8n-workflow';
 export const AkeneoProperties: INodeProperties[] = [
 
 	{
-		displayName: 'Recurso X',
+		displayName: 'Recurso',
 		name: 'resource',
 		type: 'options',
 		noDataExpression: true,
