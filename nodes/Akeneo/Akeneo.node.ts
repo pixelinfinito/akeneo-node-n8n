@@ -177,9 +177,7 @@ export class Akeneo implements INodeType {
 								break;
 
 							case 'findAll':
-								let next = baseURL + '/api/rest/v1/products?limit=100';
-								const akeneoItems = await paginateResponse(next, token);
-								return [changeToList(akeneoItems)];
+								return [await paginateResponse(baseURL + '/api/rest/v1/products?limit=100', token)];
 								break;
 
 							case 'find':

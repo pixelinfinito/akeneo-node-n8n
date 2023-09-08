@@ -1,4 +1,5 @@
 import * as akeneoRequest from "./akeneoRequest";
+import {changeToList} from "./changeToList";
 
 export async function paginateResponse(url: string, token: any) {
 	let akeneoItems: any[] = [];
@@ -16,5 +17,5 @@ export async function paginateResponse(url: string, token: any) {
 	}
 	while (response._links.next !== undefined);
 
-	return akeneoItems;
+	return changeToList(akeneoItems);
 }
