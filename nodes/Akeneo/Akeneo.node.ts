@@ -1,5 +1,6 @@
 import { IExecuteFunctions } from 'n8n-core';
 import {
+	IDataObject,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
@@ -17,12 +18,13 @@ import { CategoryProperties } from './Properties/CategoryProperties';
 import {getToken} from './helpers/getToken';
 import FormData from 'form-data';
 import fs from "fs";
+import {changeToList} from "./helpers/changeToList";
 
 export class Akeneo implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Akeneo',
 		icon: 'file:akeneo.svg',
-		name: 'Akeneo',
+		name: 'Akeneo X',
 		group: ['transform'],
 		version: 1,
 		description: 'Akeneo by pixelInfinito',
@@ -175,11 +177,27 @@ export class Akeneo implements INodeType {
 							break;
 
 							case 'findAll':
-								response = await akeneoRequest.GET({
-									token: token.access_token,
-									url: baseURL+'/api/rest/v1/products',
-								});
-								item.json["response"] = response;
+								console.log('find all attempt');
+								let next = baseURL+'/api/rest/v1/products?limit=100';
+								let akeneoItems: any[] = [];
+								do {
+									console.log('NEXT', next);
+									response = await akeneoRequest.GET({
+										token: token.access_token,
+										url: next,
+									});
+									console.log(response);
+									if(response._links.next !== undefined) {
+										next = response._links.next.href;
+									}
+									akeneoItems = akeneoItems.concat(response._embedded.items);
+								}
+								while (response._links.next !== undefined);
+
+								 return [changeToList(akeneoItems)];
+								// console.log(akeneoItems);
+
+								// return changeToList(items);
 							break;
 
 							case 'find':

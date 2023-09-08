@@ -1,6 +1,6 @@
 ![Banner image](https://github.com/pixelinfinito/akeneo-node-n8n/blob/main/nodes/Akeneo/akeneo.svg)
 
-# Akeneo n8n node
+# Akeneo OLEG n8n node
 
 
 ## Prerequisites
@@ -49,3 +49,4 @@ Refer to our [documentation on creating nodes](https://docs.n8n.io/integrations/
 ## License
 
 [MIT](https://github.com/n8n-io/n8n-nodes-starter/blob/master/LICENSE.md)
+

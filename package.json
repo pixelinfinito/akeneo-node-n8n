@@ -24,6 +24,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc && gulp build:icons",
+    "exp": "tsc && gulp build:icons && pm2 stop n8n && pm2 start n8n",
     "dev": "tsc --watch",
     "format": "prettier nodes credentials --write",
     "lint": "tslint -p tsconfig.json -c tslint.json && eslint nodes credentials package.json",
