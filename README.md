@@ -42,6 +42,16 @@ These are the basic steps for working locally without using the NPM version.
 				n8n start
 			```
 
+## Develop locally
+
+You will need pm2 (`npm i pm2 -g`)
+
+Start n8n using pm2: `pm2 start n8n`
+
+When you need to rebuild use: `npm run exp`
+
+This will trigger the akeneo node complication, then restart the local n8n instance.
+
 ## More information
 
 Refer to our [documentation on creating nodes](https://docs.n8n.io/integrations/creating-nodes/) for detailed information on building your own nodes.
