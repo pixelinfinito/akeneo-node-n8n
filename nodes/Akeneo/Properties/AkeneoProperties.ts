@@ -65,6 +65,11 @@ export const AkeneoProperties: INodeProperties[] = [
 				value: 'patch',
 				action: 'Patch a produto',
 			},
+			{
+				name: 'Build Call',
+				value: 'buildCall',
+				action: 'Build your own call',
+			},
 		],
 		displayOptions:{
 			show:{

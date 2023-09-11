@@ -187,6 +187,20 @@ export const productProperties: INodeProperties[] = [
 			},
 		},
 	},
+	{
+		displayName: 'API request',
+		name: 'apiRequest',
+		type: 'string',
+		description: 'This will call .../api/rest/v1/products/{your code here}',
+		default: '',
+		placeholder: '{your code here}',
+		displayOptions:{
+			show:{
+				resource: ['Produto'],
+				operation:['buildCall'],
+			},
+		},
+	},
 ];
 
 

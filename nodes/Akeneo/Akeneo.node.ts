@@ -12,7 +12,6 @@ import {CategoryProperties} from './Properties/CategoryProperties';
 import {getToken} from './helpers/getToken';
 import FormData from 'form-data';
 import fs from "fs";
-import {changeToList} from "./helpers/changeToList";
 import {paginateResponse} from "./helpers/pagination";
 
 export class Akeneo implements INodeType {
@@ -58,6 +57,7 @@ export class Akeneo implements INodeType {
 				const identifier = await this.getNodeParameter('identifier', itemIndex, '') as string;
 				const family = await this.getNodeParameter('family', itemIndex, '') as string;
 				const productNameQuery = await this.getNodeParameter('productNameQuery', itemIndex, '') as string;
+				const apiRequest = await this.getNodeParameter('apiRequest', itemIndex, '') as string;
 				const familyNameAdd = await this.getNodeParameter('familyNameAdd', itemIndex, '') as string;
 				const parent = await this.getNodeParameter('parent', itemIndex, '') as string;
 				const localeInput = await this.getNodeParameter('localeInput', itemIndex, '') as string;
@@ -178,6 +178,10 @@ export class Akeneo implements INodeType {
 
 							case 'findAll':
 								return [await paginateResponse(baseURL + '/api/rest/v1/products?limit=100', token)];
+								break;
+
+							case 'buildCall':
+								return [await paginateResponse(baseURL + '/api/rest/v1/products' + apiRequest, token)];
 								break;
 
 							case 'find':
