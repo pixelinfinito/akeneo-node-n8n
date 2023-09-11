@@ -52,6 +52,8 @@ When you need to rebuild use: `npm run exp`
 
 This will trigger the akeneo node complication, then restart the local n8n instance.
 
+When you have finished, you can use pm to stop n8n: `pm2 stop n8n`
+
 ## More information
 
 Refer to our [documentation on creating nodes](https://docs.n8n.io/integrations/creating-nodes/) for detailed information on building your own nodes.
