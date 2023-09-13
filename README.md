@@ -1,6 +1,6 @@
 ![Banner image](https://github.com/pixelinfinito/akeneo-node-n8n/blob/main/nodes/Akeneo/akeneo.svg)
 
-# Akeneo OLEG n8n node
+# Akeneo n8n node
 
 
 ## Prerequisites
